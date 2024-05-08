@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    /* Add a custom class for the content container */
+    .page-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50%; /* Set height to 100% of viewport height */
+        padding-top: 70px; /* Add top padding to create space for the navbar */
+    }
+    .content-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .forms-container {
+        background-color: #f7fffb;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        width: 100%; /* Adjust width as needed */
+        max-width: 600px; /* Set maximum width for better readability */
+    }
+
+    form {
+        width: 100%;
+    }
+
+    form label {
+        font-size: 120%;
+    }
+
+    form input[type="number"],
+    form input[type="text"],
+    form select {
+        width: calc(100% - 20px);
+        padding: 8px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+    }
+
+    form input[type="submit"] {
+        background-color: #FF416C;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        width: calc(100% - 20px);
+        margin-top: 10px;
+    }
+
+    form input[type="submit"]:hover {
+        background-color: #000000;
+    }
+
+    h1 {
+        text-align: center;
+    }
+</style>
+<div class="page-container">
+<div class="content-container">
+    <div class="forms-container">
+        <form id="predictionForm" method="post" action="{{ url_for('predict_crop') }}">
+            <h2>Predict Crop</h2>
+            <label for="state">State:</label>
+            <input type="text" id="state" name="state" placeholder="Enter state name" required>
+
+            <label for="season">Season:</label>
+            <select id="season" name="season" required>
+                <option value="Kharif">Kharif</option>
+                <option value="Rabi">Rabi</option>
+                <option value="Whole Year">Whole Year</option>
+            </select>
+
+            <label for="crop">Crop:</label>
+            <input type="text" id="crop" name="crop" placeholder="Enter crop name" required pattern="[A-Za-z\s]+" title="Please enter only crop name">
+
+            <label for="area">Area (hectares):</label>
+            <input type="number" id="area" name="area" placeholder="Enter Area" required >
+
+            <input type="submit" value="Predict">
+        </form>
+    </div>
+</div>
+</div>
+{% endblock %}

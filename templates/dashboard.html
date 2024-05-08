@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .page-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50%; /* Set height to 100% of viewport height */
+        padding-top: 70px; /* Add top padding to create space for the navbar */
+    }
+
+    .container {
+        background: #f7fffb;
+        display: flex;
+        flex-direction: column;
+        font-family: 'Montserrat', sans-serif;
+        padding: 20px;
+        overflow: auto;
+        max-width: 800px;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    a.button {
+        background-color: #FF416C;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+    }
+
+    a.button:hover {
+        background-color: #000000;
+    }
+
+    p {
+        margin-bottom: 5px;
+    }
+
+
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid #000000;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #9bc3ff;
+    }
+</style>
+
+<div class="page-container">
+    <div class="container">
+        <h1>User Dashboard</h1>
+        <p><b>Full Name: </b> {{user.first_name}} {{user.last_name}}</p>
+        <p><b>Email: </b> {{user.email}}</p>
+        <p><b>Phone Number: </b> {{user.phone_number}}</p>
+        
+        <a href="{{ url_for('predict')}}" class="button">Go to Prediction tab</a>
+        
+        {% if prediction_history %}
+        <h4 style="margin-top: 20px;">Previous Predictions:</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Prediction Type</th>
+                        <th>Prediction Result</th>
+                        <th>Prediction Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for prediction in prediction_history %}
+                    <tr>
+                        <td>{{ prediction.prediction_type }}</td>
+                        <td>{{ prediction.result }}</td>
+                        <td>{{ prediction.timestamp }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <h4 style="margin-top: 20px;">Previous Predictions is empty, perform some predictions to see the history.</h2>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

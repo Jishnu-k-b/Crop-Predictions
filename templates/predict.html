@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    a.button {
+        background-color: #FF416C;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+    }
+
+    a.button:hover {
+        background-color: #000000;
+    }
+    .button-container{
+        display: flex;
+        
+    }
+    .button-container {
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+  height: 100vh; /* Optional: This ensures the container takes the full height of the viewport */
+  background-color: #f7fffb;
+}
+
+
+</style>
+<div class="button-container">
+<a href="{{ url_for('predict_crop')}}" class="button">Go to Crop Prediction tab</a>
+<a href="{{ url_for('predict_ferti')}}" class="button">Go to Fertilizer Prediction tab</a>
+</div>
+{% endblock %}
