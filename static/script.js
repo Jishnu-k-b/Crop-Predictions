@@ -6,6 +6,10 @@ const errorMessage = document.getElementById("register-error-message");
 if (errorMessage) {
   container.classList.add("right-panel-active");
 }
+const errorMessageLogin = document.getElementById("login-error-message");
+if (errorMessage) {
+  container.classList.remove("right-panel-active");
+}
 signUpButton.addEventListener("click", () => {
   container.classList.add("right-panel-active");
 });

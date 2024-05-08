@@ -1,9 +1,10 @@
-from datetime import timedelta, datetime
 import bcrypt
+import re
 import numpy as np
 import pandas as pd
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from datetime import timedelta, datetime
 from sqlalchemy.exc import IntegrityError
 from flask import make_response
 from functools import wraps
@@ -137,6 +138,39 @@ def register():
             phone_number = request.form["phone_number"]
             email = request.form["email"]
             password = request.form["password"]
+            confirm_password = request.form["confirm_password"]
+
+            # Password validation
+            if not (8 <= len(password) <= 100):
+                return render_template(
+                    "sign-in-or-up.html",
+                    reg_error="Password must contain minimum 8 Characters.",
+                )
+            elif not re.search(r"[A-Z]", password):
+                return render_template(
+                    "sign-in-or-up.html",
+                    reg_error="Password must contain at least one uppercase letter.",
+                )
+            elif not re.search(r"[a-z]", password):
+                return render_template(
+                    "sign-in-or-up.html",
+                    reg_error="Password must contain at least one lowercase letter.",
+                )
+            elif not re.search(r"\d", password):
+                return render_template(
+                    "sign-in-or-up.html",
+                    reg_error="Password must contain at least one digit.",
+                )
+            elif not re.search(r"[!@#$%^&*]", password):
+                return render_template(
+                    "sign-in-or-up.html",
+                    reg_error="Password must contain at least one special character.",
+                )
+
+            if password != confirm_password:
+                return render_template(
+                    "sign-in-or-up.html", reg_error="Passwords do not match."
+                )
 
             new_user = User(
                 email=email,
