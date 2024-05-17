@@ -347,5 +347,40 @@ def predict_fert():
     )
 
 
+"""
+######
+ Products Start
+######
+"""
+
+
+@app.route("/products")
+@nocache
+def products():
+    try:
+        if not session["email"]:
+            return redirect(url_for("login"))
+    except KeyError:
+        return redirect(url_for("login"))
+    return render_template("products.html")
+
+
+@app.route("/detail")
+@nocache
+def detail():
+    try:
+        if not session["email"]:
+            return redirect(url_for("login"))
+    except KeyError:
+        return redirect(url_for("login"))
+    return render_template("detail.html")
+
+
+"""
+######
+ Products End
+######
+"""
+
 if __name__ == "__main__":
     app.run(debug=True)
