@@ -2,8 +2,26 @@
 
 {% block content %}
 <style>
+     body {
+        background-image: url('static/images/bg5.jpg');
+        background-size: cover; /* Ensures the image covers the whole page */
+        background-position: center; /* Centers the image */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        margin: 0; /* Removes default body margin */
+        height: 100vh; /* Ensures the body takes up the full viewport height */
+    }
+    body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Adjust the color and opacity */
+            z-index: -1; /* Ensure the overlay is behind the content */
+        }
     a.button {
-        background-color: #FF416C;
+        background-color: #15B9D9;
         border: none;
         color: white;
         padding: 10px 20px;
@@ -19,22 +37,27 @@
     a.button:hover {
         background-color: #000000;
     }
-    .button-container{
+    .page-container {
         display: flex;
-        
+        justify-content: center;
+        align-items: center;
+        height: 50%;
+        padding-top: 10%;
     }
+    
     .button-container {
-  display: flex;
-  justify-content: center; /* Horizontally center */
-  align-items: center; /* Vertically center */
-  height: 100vh; /* Optional: This ensures the container takes the full height of the viewport */
-  background-color: #f7fffb;
-}
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10%;
+    }
 
 
 </style>
+<div class="page-container">
 <div class="button-container">
 <a href="{{ url_for('predict_crop')}}" class="button">Go to Crop Prediction tab</a>
 <a href="{{ url_for('predict_ferti')}}" class="button">Go to Fertilizer Prediction tab</a>
 </div>
+</div>  
 {% endblock %}

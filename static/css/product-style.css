@@ -1,47 +1,66 @@
-body{
+.products-body {
+    background-image: url('../images/bg9.jpg');
     margin: 0;
     font-family: Poppins;
+    background-size: cover; /* Ensures the image covers the whole page */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    margin: 0; /* Removes default body margin */
+    height: 100%; /* Ensures the body takes up the full viewport height */
 }
+.detail-body {
+    background-image: url('../images/bg10.jpg');
+    margin: 0;
+    font-family: Poppins;
+    background-size: cover; /* Ensures the image covers the whole page */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    margin: 0; /* Removes default body margin */
+    height: 100%; /* Ensures the body takes up the full viewport height */
+}
+
 a{
     color: #F5F5F5;
     text-decoration: none;
 }
 .container{
-    width: 900px;
+    width: 70%;
     margin: auto;
     max-width: 90vw;
     text-align: center;
-    padding-top: 10px;   
+    padding-top: 10%;   
+    color: black;
 }
 .title{
     font-size: xx-large;
     padding: 20px 0;
 }
 .listProduct .item img{
-    width: 90%;
+    width: 70%;
 }
 .listProduct{
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
+    padding-bottom: 5%;
     
 }
 .listProduct .item:hover {
-    background-color: lightgray;
+    background-color: white;
 }
 .listProduct .item{
-    background-color: #F7F7F7;
+    background-color: #0000001a;
     padding: 20px;
     border-radius: 20px;
     transition: background-color 0.3s;
 }
 .listProduct .item h2{
     font-weight: 500;
-    font-size: large;
+    font-size: x-large;
 }
 .listProduct .item .price{
     letter-spacing: 2px;
-    font-size: small;
+    font-size: large;
 }
 
 
@@ -79,7 +98,7 @@ a{
 .detail .price{
     font-weight: bold;
     font-size: x-large;
-    letter-spacing: 2px;
+    letter-spacing: 2px; 
     margin-bottom: 20px;
 }
 .detail .buttons{

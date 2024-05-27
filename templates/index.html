@@ -1,5 +1,23 @@
 {% block content %}
 
+{% for message in get_flashed_messages() %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+{{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+<script>
+    setTimeout(function() {
+        var alert = document.querySelector('.alert');
+        if (alert) {
+            var closeButton = alert.querySelector('.btn-close');
+            closeButton.click();
+        }
+    }, 5000);
+</script>
+
+
+
 	<!DOCTYPE html>
 <html lang="en">
 
@@ -55,7 +73,15 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto py-0">
                         {% if 'email' in session %}
-                        <a href="{{ url_for('predict_crop')}}" class="nav-item nav-link">Predict</a>
+                        <a class="nav-item nav-link  {% if request.path == url_for('index') %}active{% endif %}" href="{{ url_for('index')}}">Home</a>
+
+                    <a class="nav-item nav-link  {% if request.path == url_for('dashboard') %}active{% endif %}" href="{{ url_for('dashboard')}}">Dashboard</a>
+                    
+                    <a class="nav-item nav-link  {% if request.path == url_for('predict_crop') %}active{% endif %}" href="{{ url_for('predict')}}">Predict</a>
+
+                    <a class="nav-item nav-link  {% if request.path == url_for('products') %}active{% endif %}" href="{{ url_for('products')}}">Products</a>
+                    
+                    <a class="nav-item nav-link  {% if request.path == url_for('logout') %}active{% endif %}" href="{{ url_for('logout')}}">Logout</a>
                         {% else %}
                         <a class="nav-item nav-link {% if request.path == url_for('index') %}active{% endif %}" href="{{ url_for('index')}}">Home</a>
                         <a class="nav-item nav-link" href="{{ url_for('login')}}">SignUp</a>

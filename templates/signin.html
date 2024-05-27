@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if get_flashed_messages() %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="padding-top: 5%;">
+        {{ get_flashed_messages()[0] }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+    <script>
+        setTimeout(function() {
+            var alert = document.querySelector('.alert');
+            if (alert) {
+                var closeButton = alert.querySelector('.btn-close');
+                closeButton.click();
+            }
+        }, 5000);
+    </script>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="/static/css/signin.css" />
+	<title>Sign in & Sign up Form</title>
+    
+</head>
+
+
+<body>
+    
+	<div class="container">
+		<div class="forms-container">
+			<div class="signin-signup">
+				<form action="/login" class="sign-in-form" method="POST">
+					<h2 class="title">Sign in</h2>
+					<div class="input-field">
+						<i class="fas fa-envelope"></i>
+						<input type="email" placeholder="Email"   id="user_email" name="user_email"/>
+					</div>
+					<div class="input-field">
+						<i class="fas fa-lock"></i>
+						<input type="password" placeholder="Password"   id="user_password" name="user_password"/>
+					</div>
+					<input type="submit" value="Login" class="btn solid" />
+					
+				</form>
+				<form action="/register" class="sign-up-form" method="POST">
+					<h2 class="title">Sign up</h2>
+					<div class="input-field">
+						<i class="fas fa-user"></i>
+						<input type="text" placeholder="First Name" id="first_name" name="first_name" required />
+					</div>
+					<div class="input-field">
+						<i class="fas fa-user"></i>
+						<input type="text" placeholder="Last Name" id="last_name" name="last_name" required />
+					</div>
+					<div class="input-field">
+						<i class="fas fa-phone"></i>
+						<input type="tel" placeholder="Phone Number" id="phone_number" name="phone_number" oninput="validatePhoneNumber()" minlength="10" required/>
+					</div>
+					<div class="input-field">
+						<i class="fas fa-envelope"></i>
+						<input type="email" placeholder="Email" id="email" name="email" required/>
+					</div>
+					<div class="input-field">
+						<i class="fas fa-lock"></i>
+						<input type="password" placeholder="Password" id="password" name="password" required/>
+					</div>
+					<div class="input-field">
+						<i class="fas fa-lock"></i>
+						<input type="password" placeholder="Confirm password" id="confirm_password" name="confirm_password"  required/>
+					</div>
+                    <span id="phone_number_error" class="error" style="color: red;"></span>
+                    <span id="password_error" class="error" style="color: red;"></span>
+
+					<input type="submit" class="btn" value="Sign up" />
+				</form>
+			</div>
+		</div>
+
+		<div class="panels-container">
+			<div class="panel left-panel">
+				<div class="content">
+					<h3>New User ? Join Us!</h3>
+					<p>
+						Ready to embark on a journey of innovation and inspiration? Enter your details below and let’s start this exciting adventure together!  
+					</p>
+					<button class="btn transparent" id="sign-up-btn">
+						Sign up
+					</button>
+				</div>
+				<img  src="https://i.ibb.co/6HXL6q1/Privacy-policy-rafiki.png" class="image" alt="" />
+			</div>
+			<div class="panel right-panel">
+				<div class="content">
+					<h3>Already have an account ?</h3>
+					<p>
+						Please Login to continue
+					</p>
+					<button class="btn transparent" id="sign-in-btn">
+						Sign in
+					</button>
+				</div>
+				<img src="https://i.ibb.co/nP8H853/Mobile-login-rafiki.png"  class="image" alt="" />
+			</div>
+		</div>
+	</div>
+
+	<script src="/static/js/signin.js"></script>
+    <script>
+    document.getElementById("phone_number").addEventListener("input", validatePhoneNumber);
+    document.getElementById("password").addEventListener("input", validatePassword);
+    document.getElementById("confirm_password").addEventListener("input", validateConfirmPassword);
+
+    function validatePhoneNumber() {
+        var phoneInput = document.getElementById("phone_number");
+        var phone = phoneInput.value;
+        var phoneError = document.getElementById("phone_number_error");
+
+        // Check if the input contains only numbers
+        if (/^\d+$/.test(phone)) {
+            // If the length is exactly 10, set the maxlength attribute to 10
+            if (phone.length === 10) {
+                phoneInput.setAttribute("maxlength", "10");
+                phoneError.textContent = "";
+            } else if (phone.length < 10) {
+                // If the length is less than 10, display an error message
+                phoneInput.removeAttribute("maxlength");
+                phoneError.textContent = "Phone number must be at least 10 digits.";
+            } else {
+                // If the length is greater than 10, remove the maxlength attribute to allow typing
+                phoneInput.removeAttribute("maxlength");
+                phoneError.textContent = "";
+            }
+        } else {
+            // If input contains non-numeric characters, display an error message
+            phoneInput.value = phone.replace(/\D/g, ''); // Remove non-numeric characters from input
+            phoneError.textContent = "Phone number must contain only numbers.";
+        }
+    }
+
+    function validatePassword() {
+        var password = document.getElementById("password").value;
+        var passwordError = document.getElementById("password_error");
+
+        // Password pattern to enforce at least one uppercase letter, one lowercase letter, one number, one special character, and a minimum length of 8 characters
+        var passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
+
+        if (!passwordPattern.test(password)) {
+            passwordError.textContent = "Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long.";
+        } else {
+            passwordError.textContent = "";
+        }
+    }
+
+    function validateConfirmPassword() {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirm_password").value;
+        var passwordError = document.getElementById("password_error");
+
+        if (password !== confirmPassword) {
+            passwordError.textContent = "Passwords do not match.";
+        } else {
+            passwordError.textContent = "";
+        }
+    }
+
+    document.getElementById("submit_button").addEventListener("click", function () {
+        var phoneError = document.getElementById("phone_number_error").textContent;
+        var passwordError = document.getElementById("password_error").textContent;
+
+        // Check if any required field is empty
+        var firstName = document.getElementById("first_name").value.trim();
+        var phoneNumber = document.getElementById("phone_number").value.trim();
+        var password = document.getElementById("password").value.trim();
+        var confirmPassword = document.getElementById("confirm_password").value.trim();
+
+        if (firstName === "" || phoneNumber === "" || password === "" || confirmPassword === "") {
+            alert("Please fill in all required fields.");
+            return; // Exit function if any field is empty
+        }
+
+        // If any error messages are not empty, show an alert
+        if (phoneError !== "" || passwordError !== "") {
+            alert("Please check the entered data.");
+        } else {
+            // Otherwise, submit the form
+            document.getElementById("signup_form").submit();
+        }
+    });
+</script>
+</body>
+{% endblock %}

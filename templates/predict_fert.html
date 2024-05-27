@@ -1,27 +1,42 @@
 {% extends "base.html" %}
 {% block content %}
 <style>
+    body {
+        background-image: url('static/images/bg8.jpg');
+        background-size: cover; /* Ensures the image covers the whole page */
+        background-position: center; /* Centers the image */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        margin: 0; /* Removes default body margin */
+        height: 100vh; /* Ensures the body takes up the full viewport height */
+    }
+    body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Adjust the color and opacity */
+            z-index: -1; /* Ensure the overlay is behind the content */
+        }
     /* Add a custom class for the content container */
     .page-container {
         display: flex;
         justify-content: center;
         align-items: center;
         height: 50%; /* Set height to 100% of viewport height */
-        padding-top: 70px; /* Add top padding to create space for the navbar */
-    }
-    .content-container {
-        display: flex;
-        justify-content: center;
+        padding-top: 6%; /* Add top padding to create space for the navbar */
     }
 
     .forms-container {
-        background-color: #f7fffb;
+        background-color: rgba(247, 255, 251, 0.8);
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
         width: 100%; /* Adjust width as needed */
-        max-width: 800px; /* Set maximum width for better readability */
+        max-width: 60%; /* Set maximum width for better readability */
+        color: black;
     }
 
     form {
@@ -42,7 +57,7 @@
     }
 
     form input[type="submit"] {
-        background-color: #FF416C;
+        background-color: #15B9D9;
         color: white;
         padding: 10px 20px;
         border: none;
@@ -61,7 +76,6 @@
 </style>
 
 <div class="page-container">
-<div class="content-container">
     <div class="forms-container">
         <form action="{{ url_for('predict_fert')}}" method="post" id="Home">
             <h2>Predict Fertilizer</h2>
@@ -110,6 +124,5 @@
             <input type="submit" value="Predict">
         </form>
     </div>
-</div>
 </div>
 {% endblock %}

@@ -1,0 +1,147 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    body {
+        background-image: url('/static/images/bg9.jpg');
+        background-size: cover; /* Ensures the image covers the whole page */
+        background-position: center; /* Centers the image */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        margin: 0; /* Removes default body margin */
+        height: 100vh; /* Ensures the body takes up the full viewport height */
+    }
+    body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.1); /* Adjust the color and opacity */
+            z-index: -1; /* Ensure the overlay is behind the content */
+        }
+    .page-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50%;
+        padding-top: 10%;
+    }
+
+    .container {
+        background: rgba(247, 255, 251, 0.8);
+        display: flex;
+        flex-direction: column;
+        font-family: 'Montserrat', sans-serif;
+        padding: 20px;
+        overflow: auto;
+        max-width: 75%;
+        color: black;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    p {
+        margin-bottom: 5px;
+    }
+
+
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: rgb(253, 237, 217);
+    }
+
+    th, td {
+        border: 1px solid #000000;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #15B9D9;
+    }   
+    a.button {
+        background-color: #15B9D9;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+    }
+
+    a.button:hover {
+        background-color: #000000;
+    }
+    .button-container{
+        display: flex;
+        
+    }
+    .button-container {
+        display: flex;
+        justify-content: center; /* Horizontally center */
+        align-items: center; /* Vertically center */
+        height: 100vh; /* Optional: This ensures the container takes the full height of the viewport */
+        background-color: #f7fffb;
+        }
+</style>
+
+<div class="page-container">
+    <div class="container">
+
+
+        {% if payment_history %}
+        <h4 style="margin-top: 20px;">Payment History:</h4>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Total amount</th>
+                        <th>Billing address</th>
+                        <th>Transaction Time</th>
+                        <th>Payment Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in payment_history %}
+                    <tr>
+                        <td>{{ payment.product_name }}</td>
+                        <td>{{ payment.quantity }}</td>
+                        <td>{{ payment.total_amount }}</td>
+                        <td>{{ payment.billing_address }}</td>
+                        <td>{{ payment.timestamp }}</td>
+                        {% if payment.payment_status == "paid" %}
+                        <td style="color: green;">{{ payment.payment_status }}</td>
+                        {% else %}
+                        <td style="color: red;">{{ payment.payment_status }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <h4 style="margin-top: 20px;">No order yet.</h4>
+        <a href="{{ url_for('products')}}" class="button">Purchase products</a>
+
+        {% endif %}
+        <a href="{{ url_for('dashboard')}}" class="button">Dashboard</a>
+        <a href="{{ url_for('products')}}" class="button">Products</a>
+
+    </div>
+</div>
+
+
+
+{% endblock %}

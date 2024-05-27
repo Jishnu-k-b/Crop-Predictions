@@ -1,10 +1,14 @@
-import bcrypt
+# account id acct_1PHpiASBR5cKwOiI
+
 import re
+import bcrypt
+import stripe
+from datetime import timezone, datetime
 import numpy as np
 import pandas as pd
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from datetime import timedelta, datetime
+from datetime import timedelta
 from sqlalchemy.exc import IntegrityError
 from flask import make_response
 from functools import wraps
@@ -15,18 +19,40 @@ from flask import (
     redirect,
     session,
     url_for,
+    jsonify,
+    flash,
 )
 
 from prediction_model import xgb_model, rf_model, gb_model, X, ferti, model
 
+# email
+
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
+
+
 app = Flask(__name__, static_url_path="/static")
+
 CORS(app)
 
 app.secret_key = "secret_key"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
-app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=15)
 
+app.config["STRIPE_PUBLIC_KEY"] = (
+    "pk_test_51PHpiASBR5cKwOiIkzoznrErODhDMRlHWe6fpLRaoMIntxgILgyWnCAnsM5EeUP2BGfDzUKRkdmm8hfvDSlg7uga00hStSNwzb"
+)
+app.config["STRIPE_SECRET_KEY"] = (
+    "sk_test_51PHpiASBR5cKwOiI7QGTOaoeA1PoygDyDywNMl5BZgCo75J0fQEPfB5PHH8hY04mAWCqC2l0FQKEsAjU6NLVCOo8000u7IlQVk"
+)
+
+stripe.api_key = app.config["STRIPE_SECRET_KEY"]
 
 db = SQLAlchemy(app)
 
@@ -75,6 +101,19 @@ class PredictionHistory(db.Model):
         self.result = result
 
 
+class Payment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    billing_address = db.Column(db.String(200), nullable=True)
+    product_name = db.Column(db.String(50), nullable=False)
+    total_amount = db.Column(db.Float, nullable=True)
+    payment_status = db.Column(db.String(50), nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    quantity = db.Column(db.Integer, nullable=True)
+
+    user = db.relationship("User", backref=db.backref("payments", lazy=True))
+
+
 with app.app_context():
     db.create_all()
 
@@ -121,6 +160,7 @@ def dashboard():
                 "timestamp": prediction.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
             }
         )
+
     return render_template(
         "dashboard.html",
         user=user,
@@ -143,33 +183,33 @@ def register():
             # Password validation
             if not (8 <= len(password) <= 100):
                 return render_template(
-                    "sign-in-or-up.html",
+                    "signin.html",
                     reg_error="Password must contain minimum 8 Characters.",
                 )
             elif not re.search(r"[A-Z]", password):
                 return render_template(
-                    "sign-in-or-up.html",
+                    "signin.html",
                     reg_error="Password must contain at least one uppercase letter.",
                 )
             elif not re.search(r"[a-z]", password):
                 return render_template(
-                    "sign-in-or-up.html",
+                    "signin.html",
                     reg_error="Password must contain at least one lowercase letter.",
                 )
             elif not re.search(r"\d", password):
                 return render_template(
-                    "sign-in-or-up.html",
+                    "signin.html",
                     reg_error="Password must contain at least one digit.",
                 )
             elif not re.search(r"[!@#$%^&*]", password):
                 return render_template(
-                    "sign-in-or-up.html",
+                    "signin.html",
                     reg_error="Password must contain at least one special character.",
                 )
 
             if password != confirm_password:
                 return render_template(
-                    "sign-in-or-up.html", reg_error="Passwords do not match."
+                    "signin.html", reg_error="Passwords do not match."
                 )
 
             new_user = User(
@@ -183,11 +223,9 @@ def register():
             db.session.commit()
             return redirect("login")
     except IntegrityError:
-        return render_template(
-            "sign-in-or-up.html",
-            reg_error="Email/Phone number already exists",
-        )
-    return render_template("sign-in-or-up.html")
+        flash("Email/Phone number already exists!")
+        return render_template("signin.html")
+    return render_template("signin.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -204,20 +242,20 @@ def login():
             session["first_name"] = user.first_name
             session["last_name"] = user.last_name
             session["email"] = user.email
-            return render_template("index.html")
+            flash("Login Success!")
+            return redirect(url_for("index"))
         else:
-            return render_template(
-                "sign-in-or-up.html",
-                login_error="Check your email and password.",
-            )
-    return render_template("sign-in-or-up.html")
+            flash("Check your email and password.")
+            return render_template("signin.html")
+    return render_template("signin.html")
 
 
 @app.route("/logout")
 @nocache
 def logout():
     session.pop("email", None)
-    return redirect("/login")
+    flash("Logout Success!")
+    return redirect(url_for("login"))
 
 
 @app.route("/predict")
@@ -365,15 +403,148 @@ def products():
     return render_template("products.html")
 
 
-@app.route("/detail")
-@nocache
+@app.route("/detail", methods=["GET", "POST"])
 def detail():
     try:
         if not session["email"]:
             return redirect(url_for("login"))
     except KeyError:
         return redirect(url_for("login"))
+    message = request.args.get("message")
+    if message:
+        return render_template("detail.html", message=message)
     return render_template("detail.html")
+
+
+@app.route("/checkout", methods=["GET", "POST"])
+def checkout():
+    if "email" not in session:
+        return redirect(url_for("login"))
+    else:
+        customer_email = session["email"]
+
+    price_id = request.form.get("stripe_id")
+    quantity = request.form.get("quantity")
+
+    try:
+        # Create a Stripe Checkout session
+        checkout_session = stripe.checkout.Session.create(
+            customer_email=customer_email,
+            line_items=[
+                {
+                    "price": price_id,
+                    "quantity": quantity,
+                }
+            ],
+            mode="payment",
+            billing_address_collection="required",
+            success_url=f"http://localhost:5000/payment/success?session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=f"http://localhost:5000/payment/failure?session_id={{CHECKOUT_SESSION_ID}}",
+        )
+        return redirect(checkout_session.url, code=303)
+    except Exception as e:
+        return str(e), 500
+
+
+@app.route("/payment/success", methods=["GET"])
+def payment_success():
+    try:
+        if not session["email"]:
+            return redirect(url_for("login"))
+    except KeyError:
+        return redirect(url_for("login"))
+
+    session_id = request.args.get("session_id")
+    checkout_session = stripe.checkout.Session.retrieve(session_id)
+
+    status = checkout_session.get("payment_status")
+    address = checkout_session.customer_details.address
+    created_timestamp = checkout_session.created
+    total_amount = checkout_session.amount_total / 100
+
+    line_items = stripe.checkout.Session.list_line_items(session_id)
+    for item in line_items.data:
+        item_name = item.description
+        quantity = item.quantity
+
+    payment_time = datetime.fromtimestamp(created_timestamp, tz=timezone.utc)
+
+    email = session["email"]
+
+    # mail for the recipient
+    message = Mail(
+        from_email="crop.prjct.test.123@gmail.com",
+        to_emails=email,
+        subject=f"Your payment of Rs.{total_amount} for {item_name} is successful",
+        html_content=f"Order details:<br><ul> <li>Product: {item_name}</li> <li> Quantity: {quantity}</li> <li>Total amount paid: {total_amount}</li><ul> <br>Your order is now being processed, and we will notify you once it has been shipped. If you have any questions or need further assistance, feel free to contact us.",
+    )
+    try:
+        sg = SendGridAPIClient(os.getenv("SENDGRID_API_KEY"))
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(e.message)
+
+    user = User.query.filter_by(email=email).first()
+    current_user_id = user.id
+
+    if not current_user_id:
+        return jsonify({"error": "User not found"}), 404
+
+    billing_address = f"{address['line1']}, {address['city']}, {address['state']}, {address['postal_code']}, {address['country']}"
+    existing_payment = Payment.query.filter_by(
+        user_id=current_user_id, timestamp=payment_time, payment_status=status
+    ).first()
+    if not existing_payment:
+        payment = Payment(
+            user_id=current_user_id,
+            payment_status=status,
+            billing_address=billing_address,
+            timestamp=payment_time,
+            product_name=item_name,
+            quantity=quantity,
+            total_amount=total_amount,
+        )
+        db.session.add(payment)
+        db.session.commit()
+
+    flash("True")
+    return redirect(url_for("products"))
+
+
+@app.route("/payment/history")
+def payment_history():
+    try:
+        if not session["email"]:
+            return redirect(url_for("login"))
+    except KeyError:
+        return redirect(url_for("login"))
+
+    user = User.query.filter_by(email=session["email"]).first()
+    payment_history = Payment.query.filter_by(user_id=user.id).all()
+
+    # Prepare payment history data to pass to the template
+    payment_data = []
+    for payment in payment_history:
+        payment_data.append(
+            {
+                "payment_status": payment.payment_status,
+                "billing_address": payment.billing_address,
+                "timestamp": payment.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+                "product_name": payment.product_name,
+                "quantity": payment.quantity,
+                "total_amount": payment.total_amount,
+            }
+        )
+    return render_template("payment-history.html", payment_history=payment_data)
+
+
+@app.route("/payment/failure", methods=["GET"])
+def payment_failed():
+    flash("False")
+    return redirect(url_for("products"))
 
 
 """
