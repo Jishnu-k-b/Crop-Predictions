@@ -45,12 +45,8 @@ app.secret_key = "secret_key"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=15)
 
-app.config["STRIPE_PUBLIC_KEY"] = (
-    "pk_test_51PHpiASBR5cKwOiIkzoznrErODhDMRlHWe6fpLRaoMIntxgILgyWnCAnsM5EeUP2BGfDzUKRkdmm8hfvDSlg7uga00hStSNwzb"
-)
-app.config["STRIPE_SECRET_KEY"] = (
-    "sk_test_51PHpiASBR5cKwOiI7QGTOaoeA1PoygDyDywNMl5BZgCo75J0fQEPfB5PHH8hY04mAWCqC2l0FQKEsAjU6NLVCOo8000u7IlQVk"
-)
+app.config["STRIPE_PUBLIC_KEY"] = os.getenv("STRIPE_PUBLIC_KEY")
+app.config["STRIPE_SECRET_KEY"] = os.getenv("STRIPE_SECRET_KEY")
 
 stripe.api_key = app.config["STRIPE_SECRET_KEY"]
 
@@ -438,8 +434,8 @@ def checkout():
             ],
             mode="payment",
             billing_address_collection="required",
-            success_url=f"http://localhost:5000/payment/success?session_id={{CHECKOUT_SESSION_ID}}",
-            cancel_url=f"http://localhost:5000/payment/failure?session_id={{CHECKOUT_SESSION_ID}}",
+            success_url=f"http://localhost:5000/payment/success?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url=f"http://localhost:5000/payment/failure?session_id={CHECKOUT_SESSION_ID}",
         )
         return redirect(checkout_session.url, code=303)
     except Exception as e:
@@ -450,8 +446,10 @@ def checkout():
 def payment_success():
     try:
         if not session["email"]:
+            flash("Payment failed, Try again")
             return redirect(url_for("login"))
     except KeyError:
+        flash("Payment failed, Try again")
         return redirect(url_for("login"))
 
     session_id = request.args.get("session_id")
