@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/product-style.css') }}">
+</head>
+
+<body class="products-body">
+    <div class="container">
+        {% for message in get_flashed_messages() %}
+        {% if message == "Payment Successful, but something went wrong, please login again. Check your email for payment details!" %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            Payment Success! Order has been placed. An email has been sent with details. <a href="{{ url_for('payment_history') }}" style="color: black;"><strong>Click to view order details.</strong></a>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% else %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Payment failed!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+        {% endfor %}
+        <script>
+            setTimeout(function() {
+                var alert = document.querySelector('.alert');
+                if (alert) {
+                    var closeButton = alert.querySelector('.btn-close');
+                    closeButton.click();
+                }
+            }, 25000);
+        </script>
+        <div class="title">PRODUCT LIST</div>
+        <div class="listProduct"></div>
+    </div>
+    
+    <script>
+        let products = null;
+        
+        // Get data from JSON file
+        fetch("{{ url_for('static', filename='json/products.json') }}")
+            .then(response => response.json())
+            .then(data => {
+                products = data;
+                addDataToHTML();
+            })
+            .catch(error => console.error('Error fetching the JSON:', error));
+
+        function addDataToHTML() {
+            let listProductHTML = document.querySelector('.listProduct');
+            if (products) {
+                products.forEach(product => {
+                    let newProduct = document.createElement('a');
+                    newProduct.href = '/detail?id=' + product.id;
+                    newProduct.classList.add('item');
+                    newProduct.innerHTML = `
+                        <img src="${product.image}" alt="">
+                        <h2>${product.name}</h2>
+                        <div class="price">Rs.${product.price}</div>`;
+                    listProductHTML.appendChild(newProduct);
+                });
+            }
+        }
+    </script>
+</body>
+{% endblock %}

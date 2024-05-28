@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    
+
+    #bgVideo {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover; /* Ensures the video covers the whole viewport */
+        transform: translate(-50%, -50%);
+        z-index: -1; /* Places the video behind other content */
+    }
+
+    .content {
+        position: relative;
+        z-index: 1; /* Ensures the content is above the video */
+        color: white;
+        text-align: center;
+    }
+
+
+
+    .page-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50%;
+        padding-top: 10%;
+    }
+
+    .container {
+        background: rgba(247, 255, 251,0.8);
+        display: flex;
+        flex-direction: column;
+        font-family: 'Montserrat', sans-serif;
+        padding: 20px;
+        overflow: auto;
+        max-width: 75%;
+        color: black;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    a.button {
+        background-color: #15B9D9;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+    }
+
+    a.button:hover {
+        background-color: #000000;
+    }
+
+    p {
+        margin-bottom: 5px;
+    }
+
+
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid #000000;
+        padding: 8px;
+        text-align: left;
+        color: black;
+    }
+
+    th {
+        background-color: #15B9D9;
+        color: black;
+    }
+</style>
+
+
+<video autoplay muted loop id="bgVideo">
+    <source src="/static/videos/bg1.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+<div class="page-container">
+    <div class="container">
+        <h1>User Dashboard</h1>
+        {% if user %}
+        <p><b>Full Name: </b> {{user.first_name}} {{user.last_name}}</p>
+        <p><b>Email: </b> {{user.email}}</p>
+        <p><b>Phone Number: </b> {{user.phone_number}}</p>
+        {% endif %}
+        
+        <a href="{{ url_for('predict')}}" class="button">Go to Prediction</a>
+        <a href="{{ url_for('payment_history')}}" class="button">Go to Order history</a>
+        
+        {% if prediction_history %}
+        <h4 style="margin-top: 20px;">Previous Predictions:</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Prediction Type</th>
+                        <th>Prediction Result</th>
+                        <th>Prediction Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for prediction in prediction_history %}
+                    <tr>
+                        <td>{{ prediction.prediction_type }}</td>
+                        <td>{{ prediction.result }}</td>
+                        <td>{{ prediction.timestamp }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <h4 style="margin-top: 20px;">Previous Predictions is empty, perform some predictions to see the history.</h2>
+        {% endif %}
+    </div>
+</div>
+<script>
+    // Automatically close the alert after 5 seconds
+    setTimeout(function() {
+            var alert = document.getElementById('messageAlert');
+            if (alert) {
+                alert.style.display = 'none';
+            }
+        }, 20000);
+</script>
+{% endblock %}
