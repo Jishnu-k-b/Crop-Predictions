@@ -78,7 +78,7 @@
         "name":"Tea",
         "price": 230,
         "image": "static/images/10.png",
-        "description": "description",
+        "description": "Tea is an aromatic beverage prepared by pouring hot or boiling water over cured or fresh leaves of Camellia sinensis, an evergreen shrub native to East Asia which probably originated in the borderlands of southwestern China and northern Myanmar. Tea is also made, but rarely, from the leaves of Camellia taliensis. After plain water, tea is the most widely consumed drink in the world. There are many different types of tea; some have a cooling, slightly bitter, and astringent flavour, while others have profiles that include sweet, nutty, floral, or grassy notes. Tea has a stimulating effect in humans, primarily due to its caffeine content.",
         "stripe_id":"price_1PKHHKSBR5cKwOiInAlfWYgh"
     },
     {
@@ -86,7 +86,7 @@
         "name":"Banana",
         "price": 230,
         "image": "static/images/11.png",
-        "description": "description",
+        "description": "A banana is an elongated, edible fruit – botanically a berry – produced by several kinds of large herbaceous flowering plants in the genus Musa. In some countries, cooking bananas are called plantains, distinguishing them from dessert bananas. The fruit is variable in size, color, and firmness, but is usually elongated and curved, with soft flesh rich in starch covered with a rind, which may have a variety of colors when ripe. The fruits grow upward in clusters near the top of the plant. Almost all modern edible seedless (parthenocarp) bananas come from two wild species – Musa acuminata and Musa balbisiana. Most cultivated bananas are M. acuminata, M. balbisiana, or hybrids of the two.",
         "stripe_id":"price_1PKHJgSBR5cKwOiIar47ZpbF"
     },
     {
@@ -94,7 +94,7 @@
         "name":"Coconut",
         "price": 230,
         "image": "static/images/12.png",
-        "description": "description",
+        "description": "The coconut tree (Cocos nucifera) is a member of the palm tree family (Arecaceae) and the only living species of the genus Cocos. The term coconut can refer to the whole coconut palm, the seed, or the fruit, which botanically is a drupe, not a nut. They are ubiquitous in coastal tropical regions and are a cultural icon of the tropics.",
         "stripe_id":"price_1PKHKHSBR5cKwOiIpjQ0T0Zz"
     },
     {
@@ -102,7 +102,7 @@
         "name":"Coffee",
         "price": 230,
         "image": "static/images/13.png",
-        "description": "description",
+        "description": "A coffee bean is a seed from the Coffea plant and the source for coffee. It is the pip inside the red or purple fruit. This fruit is often referred to as a coffee cherry, and like the cherry, it is a fruit with a pip. Even though the coffee beans are not technically beans, they are referred to as such because of their resemblance to true beans. The fruits most commonly contain two stones with their flat sides together.",
         "stripe_id":"price_1PKHKlSBR5cKwOiIFcChzzqP"
     },
     {
@@ -110,7 +110,7 @@
         "name":"Black Pepper",
         "price": 230,
         "image": "static/images/14.png",
-        "description": "description",
+        "description": "Black pepper (Piper nigrum) is a flowering vine in the family Piperaceae, cultivated for its fruit (the peppercorn), which is usually dried and used as a spice and seasoning. The fruit is a drupe (stonefruit) which is about 5 mm (0.20 in) in diameter (fresh and fully mature), dark red, and contains a stone which encloses a single pepper seed. Peppercorns and the ground pepper derived from them may be described simply as pepper, or more precisely as black pepper (cooked and dried unripe fruit), green pepper (dried unripe fruit), or white pepper (ripe fruit seeds).",
         "stripe_id":"price_1PKHLBSBR5cKwOiIIoffZlAo"
     },
     {
@@ -118,7 +118,7 @@
         "name":"Watermelon Seeds",
         "price": 230,
         "image": "static/images/15.png",
-        "description": "description",
+        "description": "Watermelon (Citrullus lanatus) is a flowering plant species of the Cucurbitaceae family and the name of its edible fruit. A scrambling and trailing vine-like plant, it is a highly cultivated fruit worldwide, with more than 1,000 varieties. Watermelon is grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, and is botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many black seeds, although seedless varieties exist.",
         "stripe_id":"price_1PKHMWSBR5cKwOiIcgh4QRId"
     },
     {
@@ -126,7 +126,7 @@
         "name":"Almonds",
         "price": 230,
         "image": "static/images/16.png",
-        "description": "description",
+        "description": "The almond (Prunus amygdalus, syn. Prunus dulcis) is a species of tree from the genus Prunus cultivated worldwide for its seed, a culinary nut. Along with the peach, it is classified in the subgenus Amygdalus, distinguished from the other subgenera by corrugations on the shell (endocarp) surrounding the seed.",
         "stripe_id":"price_1PKHNFSBR5cKwOiI33VCFFnB"
     },
     {
@@ -134,7 +134,7 @@
         "name":"Cashew",
         "price": 230,
         "image": "static/images/17.png",
-        "description": "description",
+        "description": "Cashew is the common name of a tropical evergreen tree Anacardium occidentale, in the family Anacardiaceae. It is native to South America and is the source of the cashew nut and the cashew apple, an accessory fruit. The tree can grow as tall as 14 metres (46 feet), but the dwarf cultivars, growing up to 6 m (20 ft), prove more profitable, with earlier maturity and greater yields. The cashew nut is edible and is eaten on its own as a snack, used in recipes, or processed into cashew cheese or cashew butter.",
         "stripe_id":"price_1PKHQISBR5cKwOiIKFpB7V8t"
     },
     {
@@ -142,7 +142,7 @@
         "name":"Pumpkin Seeds",
         "price": 230,
         "image": "static/images/18.png",
-        "description": "description",
+        "description": "A pumpkin seed, also known in North America as a pepita (from the Mexican Spanish: pepita de calabaza, 'little seed of squash'), is the edible seed of a pumpkin or certain other cultivars of squash. The seeds are typically flat and oval with one axis of symmetry, have a white outer husk, and are light green in color after the husk is removed. Some pumpkin cultivars are huskless, and are grown only for their edible seed. The seeds are nutrient- and calorie-rich, with an especially high content of fat (particularly linoleic acid and oleic acid), protein, dietary fiber, and numerous micronutrients. Pumpkin seed can refer either to the hulled kernel or unhulled whole seed, and most commonly refers to the roasted end product used as a snack.",
         "stripe_id":"price_1PKHR2SBR5cKwOiIjw5ilWRa"
     },
     {
@@ -150,7 +150,7 @@
         "name":"Cucumber Seeds",
         "price": 230,
         "image": "static/images/19.png",
-        "description": "description",
+        "description": "The cucumber (Cucumis sativus) is a widely-cultivated creeping vine plant in the family Cucurbitaceae that bears cylindrical to spherical fruits, which are used as culinary vegetables. Considered an annual plant, there are three main types of cucumber—slicing, pickling, and seedless—within which several cultivars have been created.",
         "stripe_id":"price_1PKHRTSBR5cKwOiI2ULUM37k"
     }
 
