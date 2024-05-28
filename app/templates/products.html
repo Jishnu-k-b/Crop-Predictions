@@ -32,6 +32,7 @@
             }, 25000);
         </script>
         <div class="title">PRODUCT LIST</div>
+        <input type="text" id="searchBar" placeholder="Search for products..." onkeyup="searchProducts()">
         <div class="listProduct"></div>
     </div>
     
@@ -49,6 +50,7 @@
 
         function addDataToHTML() {
             let listProductHTML = document.querySelector('.listProduct');
+            listProductHTML.innerHTML = '';
             if (products) {
                 products.forEach(product => {
                     let newProduct = document.createElement('a');
@@ -61,6 +63,23 @@
                     listProductHTML.appendChild(newProduct);
                 });
             }
+        }
+
+        function searchProducts() {
+            let query = document.getElementById('searchBar').value.toLowerCase();
+            let filteredProducts = products.filter(product => product.name.toLowerCase().includes(query));
+            let listProductHTML = document.querySelector('.listProduct');
+            listProductHTML.innerHTML = '';
+            filteredProducts.forEach(product => {
+                let newProduct = document.createElement('a');
+                newProduct.href = '/detail?id=' + product.id;
+                newProduct.classList.add('item');
+                newProduct.innerHTML = `
+                    <img src="${product.image}" alt="">
+                    <h2>${product.name}</h2>
+                    <div class="price">Rs.${product.price}</div>`;
+                listProductHTML.appendChild(newProduct);
+            });
         }
     </script>
 </body>

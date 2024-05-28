@@ -35,6 +35,18 @@ a{
     font-size: xx-large;
     padding: 20px 0;
 }
+
+#searchBar {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 20px;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: block;
+}
+
 .listProduct .item img{
     width: 70%;
 }
