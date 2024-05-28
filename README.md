@@ -1,8 +1,4 @@
-
 # Crop and Fertilizer prediction
-
-
-
 
 ## Run Locally
 
@@ -26,6 +22,14 @@ Activate Virtual Environment
   venv\Scripts\activate
 ```
 
+Install the dependencies
+
+```bash
+  pip install -r requirements.txt
+
+  venv\Scripts\activate
+```
+
 Create a .env file in the root folder and provide the following keys
 
 ```bash
@@ -33,13 +37,15 @@ Create a .env file in the root folder and provide the following keys
   STRIPE_SECRET_KEY
   STRIPE_PUBLIC_KEY
 ```
+
 Run the project
 
 ```bash
   py run.py
 ```
+
 For Stripe payment use the following card number(IN)
 
 ```bash
   4000003560000008
-  ```
+```
